@@ -1,5 +1,5 @@
 "use client"
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 
 export const CartContext = createContext();
 
@@ -51,17 +51,17 @@ export const CartProvider = ({ children }) => {
 		);
 	};
 
-	const calculateSubtotal = () => {
-		let total = 0;
-		currentOrder.forEach((album) => {
-			const price = parseFloat(album.price);
-			const discount = parseFloat(album.descount || 0) * 10; // Si el descuento no está definido, se asume 0
-			const discountedPrice = price - (price * discount / 100);
-			const subtotal = discountedPrice * album.quantity;
-			total += subtotal;
-		});
-		setSubtotal(total.toFixed(2));
-	};
+    const calculateSubtotal = useCallback(() => {
+        let total = 0;
+        currentOrder.forEach((album) => {
+            const price = parseFloat(album.price);
+            const discount = parseFloat(album.descount || 0) * 10; // Si el descuento no está definido, se asume 0
+            const discountedPrice = price - (price * discount / 100);
+            const subtotal = discountedPrice * album.quantity;
+            total += subtotal;
+        });
+        setSubtotal(total.toFixed(2));
+    }, [currentOrder]);
 
 	const submitOrder = async (email) => {
 		const orderData = {
@@ -99,7 +99,7 @@ export const CartProvider = ({ children }) => {
 
 	useEffect(() => {
 		calculateSubtotal();
-	}, [currentOrder]);
+	}, [currentOrder, calculateSubtotal]);
 
 
 	return (

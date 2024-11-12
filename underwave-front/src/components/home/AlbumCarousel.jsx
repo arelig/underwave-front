@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, Suspense } from "react";
 import { Carousel, IconButton, Spinner } from "@material-tailwind/react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
+//import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import AlbumCard from "../album/Card";
 import getAlbums from "@app/lib/getAlbums";
 import { useMediaQuery } from "react-responsive";
@@ -58,7 +58,7 @@ const ProductCarousel = () => {
 				onClick={handlePrev}
 				className="!absolute top-2/4 -translate-y-2/4 left-4"
 				>
-				<ArrowLeftIcon strokeWidth={2} className="w-6 h-6 indigo-900" />
+				{/*<ArrowLeftIcon strokeWidth={2} className="w-6 h-6 indigo-900" />*/}
 				</IconButton>
 			)}
 			nextArrow={({ handleNext }) => (
@@ -69,7 +69,7 @@ const ProductCarousel = () => {
 				onClick={handleNext}
 				className="!absolute top-2/4 -translate-y-2/4 !right-4"
 				>
-				<ArrowRightIcon strokeWidth={2} className="w-6 h-6 indigo-900 " />
+				{/* <ArrowRightIcon strokeWidth={2} className="w-6 h-6 indigo-900 " /> */}
 				</IconButton>
 			)}
 			navigation={({ setActiveIndex, activeIndex }) => (

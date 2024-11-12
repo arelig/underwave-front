@@ -28,7 +28,7 @@ export default function FilterGenre({data, onGenreChange }) {
 	useEffect(() => {
 		// Llama a la función onGenreChange con los géneros seleccionados cada vez que selectedGenres cambie
 		onGenreChange(selectedGenres);
-	  }, [selectedGenres]);
+	  }, [selectedGenres, onGenreChange]);
 
 	return (
 		<Card color="transparent" shadow={false} className="flex min-w-fit max-w-full justify-center">

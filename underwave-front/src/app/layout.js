@@ -17,7 +17,7 @@ const RootLayout = ({ children }) => {
       <body className='bg-stone-100 p-3'>
         <CartProvider>
           <NavBar />
-          {children}
+          {/* {children} */}
           <SimpleFooter />
         </CartProvider>
       </body>

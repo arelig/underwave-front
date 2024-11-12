@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Grid from "@components/album/AlbumGrid";
 import FilterGenre from "@/components/album/FilterGenres";
 import getGenres from "@/app/lib/getGenres";
@@ -26,7 +26,7 @@ const Page = () => {
   }, []);
 
   // Función para manejar el cambio de género
-  const handleGenreChange = (selectedGenres) => {
+  const handleGenreChange = useCallback((selectedGenres) => {
     if (selectedGenres.length === 0) {
       // Si no hay géneros seleccionados, muestra todos los álbums
       setFilteredAlbums(localAlbums);
@@ -37,7 +37,7 @@ const Page = () => {
       );
       setFilteredAlbums(filtered);
     }
-  };
+  }, [localAlbums]);
 
   return (    
   <>
