@@ -20,7 +20,7 @@ export default function NavBar() {
 
   const navItems = [
 	{ name: 'Home', path: '/' },
-	{ name: 'Catalogo', path: '/albums' },
+	{ name: 'Catalogo', path: '/catalog' },
 	{ name: 'Carrito', path: '/services' },
   ];
  

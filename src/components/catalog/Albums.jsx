@@ -1,17 +1,17 @@
 "use client"
 import ReactPaginate from "react-paginate";
 import { useState, useEffect } from "react";
-import AlbumCard from "./Card";
+import AlbumCard from "./Album";
 
-export default function AlbumGrid({data}){
+export default function Albums({ data: albumsData }){
 	const itemsPerPage = 12;
 	const [currentPage, setCurrentPage] = useState(0);
 
 	const indexOfLastItem = (currentPage + 1) * itemsPerPage;
 	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-	const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+	const currentItems = albumsData.slice(indexOfFirstItem, indexOfLastItem);
 
-	const pageCount = Math.ceil(data.length / itemsPerPage);
+	const pageCount = Math.ceil(albumsData.length / itemsPerPage);
 
 	const handlePageChange = ({ selected }) => {
 		setCurrentPage(selected);
@@ -51,8 +51,6 @@ export default function AlbumGrid({data}){
 				activeClassName="font-bold"
 				/>
 		</div>
-		
-
 	  </>
   );
 }

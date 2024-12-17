@@ -2,8 +2,8 @@
 import { useState, useEffect, Suspense } from "react";
 import { Carousel, IconButton, Spinner } from "@material-tailwind/react";
 //import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
-import AlbumCard from "../album/Card";
-import getAlbums from "@app/lib/getAlbums";
+import AlbumCard from "@components/catalog/Album";
+import getAlbums from "@lib/getAlbums";
 import { useMediaQuery } from "react-responsive";
 
 const AlbumCarousel = () => {

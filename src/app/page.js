@@ -2,7 +2,7 @@
 import Carousel from "@/components/home/Carousel";
 import AlbumCarousel from "@components/home/AlbumCarousel";
 
-import Typography from "@components/material/Typography";
+import Typography from "@components/material/CustomTypography";
 
 
 export default function Home() {

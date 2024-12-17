@@ -4,22 +4,23 @@ import {
 	Card,
 	CardHeader,
 	CardBody,
-	CardFooter,
-	Typography,
-	Button,
   } from '@material-tailwind/react';
 
-import {CartContext} from '../../app/lib/cartContext';
+import Typography from "@components/material/CustomTypography";
+import Button from "@components/material/Button";
+
+
+import {CartContext} from '../../lib/cartContext';
 import { useContext, useState } from 'react';
   
-export default function AlbumCard({ data }) {
+export default function AlbumCard({ data: albumDetails }) {
 const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-const {id,name,artist,price,artwork} = data;
+const {id,name,artist,price,artwork} = albumDetails;
 
 const { addToCart } = useContext(CartContext);
 
 const handleAddToCart = () => {
-	addToCart(data);
+	addToCart(albumDetails);
 	setShowSuccessMessage(true);
 	setTimeout(() => {
 		setShowSuccessMessage(false);
@@ -57,7 +58,7 @@ return (
 			ripple={false}
 			fullWidth={true}
 			className="bg-indigo-900 text-white shadow-none hover:shadow-none hover:scale-105 focus:shadow-none focus:scale-105 active:scale-100"
-			onClick={() => handleAddToCart(data)}
+			onClick={() => handleAddToCart(albumDetails)}
 			>
 			Add to Cart
 			</Button>
