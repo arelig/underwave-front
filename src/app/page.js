@@ -12,7 +12,7 @@ export default function Home() {
 		<Typography variant="h1" className="flex items-center justify-center uppercase pt-5 text-indigo-700" >
 			Busca en nuestro catalogo
 		</Typography>
-		<AlbumCarousel />
+		{/* <AlbumCarousel /> */}
 		</div>
 
 	);

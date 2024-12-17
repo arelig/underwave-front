@@ -1,213 +1,136 @@
-// "use client"
-// import { Fragment, useState, useContext } from 'react';
-// import Image from 'next/image';
-// import Link from 'next/link';
-// import { Dialog, Transition } from '@headlessui/react';
-// //import { XMarkIcon } from '@heroicons/24/solid';
-// import { CartContext } from "../../app/lib/cartContext";
-// import { CheckoutDialog } from './CheckoutDialog';
-// import OrderSatus from './OrderStatus';
+'use client';
 
-// export default function CartDrawer({open, onClose}) {
-//   const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false);
-//   const [orderSuccessDialogOpen, setOrderSuccessDialogOpen] = useState(false);
-//   const [orderDetails, setOrderDetails] = useState(null);
+import { useContext } from 'react';
+import {
+  Drawer,
+  Typography,
+  IconButton,
+} from '@material-tailwind/react';
+import Image from 'next/image';
+import { CartContext } from '@/lib/cartContext';
+import Button from '@/components/material/Button';
 
-//   const { currentOrder, removeFromCart, clearCart, subtotal, updateQuantity, submitOrder } = useContext(CartContext);
+export function CartDrawer({ openRight, toggleDrawer }) {
+  const { currentOrder, removeFromCart, clearCart, subtotal } = useContext(CartContext);
 
-//   const handleUpdateQuantity = (albumId, quantity) => {
-//     updateQuantity(albumId, quantity);
-//   };
-
-//   const handleCheckout = () => {
-//     setCheckoutDialogOpen(true);
-//   };
-
-//   const closeCheckoutDialog = () => {
-//     setCheckoutDialogOpen(false);
-//   };
-
-//   const handleConfirmCheckout = async (email) => {
-//     try {
-//       const response = await submitOrder(email);
-
-//       setOrderDetails(response);
-//       setOrderSuccessDialogOpen(true);
-
-//       clearCart();
-//       closeCheckoutDialog();
-// 	  orderSuccessDialogOpen(true);
-//     } catch (error) {
-//       console.error('Error al enviar la orden:', error);
-//     }
-//   };
-
-//   const closeOrderSuccessDialog = () => {
-//     setOrderSuccessDialogOpen(false);
-//   };
-
-//   //Multiplica [0..7] => [0..70]
-//   const calculateDiscountedPrice = (price, discount) => {
-// 	const discountedPrice = price - (price * discount*10) / 100;
-// 	return discountedPrice.toFixed(2);
-//   };
-  
-
-//   return (
-// <>
-// 	<Transition show={open} as={Fragment}>
-// 	  <Dialog as="div" className="relative z-10" onClose={onClose}>
-// 		<Transition
-// 		  as={Fragment}
-// 		  enter="ease-in-out duration-500"
-// 		  enterFrom="opacity-0"
-// 		  enterTo="opacity-100"
-// 		  leave="ease-in-out duration-500"
-// 		  leaveFrom="opacity-100"
-// 		  leaveTo="opacity-0"
-// 		>
-// 		  <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-// 		</Transition>
-
-// 		<div className="fixed inset-0 overflow-hidden">
-// 		  <div className="absolute inset-0 overflow-hidden">
-// 			<div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-// 			  <Transition
-// 				as={Fragment}
-// 				enter="transform transition ease-in-out duration-500 sm:duration-700"
-// 				enterFrom="translate-x-full"
-// 				enterTo="translate-x-0"
-// 				leave="transform transition ease-in-out duration-500 sm:duration-700"
-// 				leaveFrom="translate-x-0"
-// 				leaveTo="translate-x-full"
-// 			  >
-// 				<Dialog className="pointer-events-auto w-screen max-w-md">
-// 				  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-// 					<div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-// 					  <div className="flex items-start justify-between">
-// 						<Dialog className="text-lg font-medium text-gray-900">Mi carrito</Dialog>
-// 						<div className="ml-3 flex h-7 items-center">
-// 						  <button
-// 							type="button"
-// 							className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-// 							onClick={onClose}
-// 						  >
-// 							<span className="sr-only">Cerrar</span>
-// 						{/* <XMarkIcon className="h-6 w-6" aria-hidden="true" /> */	}
-// 						  </button>
-// 						</div>
-// 					  </div>
-
-// 					  <div className="mt-8">
-// 						<div className="flow-root">
-// 						  <ul role="list" className="-my-6 divide-y divide-gray-200">
-// 							{currentOrder.map((album) => (
-// 							  <li key={album.id} className="flex py-6">
-// 								<div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-// 								  <Image
-// 									src={album.artwork}
-// 									alt={album.name}
-// 									width={100}
-// 									height={100}
-// 									className="h-full w-full object-cover object-center"
-// 								  />
-// 								</div>
-
-// 								<div className="ml-4 flex flex-1 flex-col">
-
-// 								  <div>
-// 									<div className="flex justify-between text-base font-medium text-gray-900">
-// 										<h3>
-// 											<p>{album.name}</p>
-// 										</h3>
-// 										<del className='p-1 text-gray-700'>{album.price}</del>
-// 										<ins className='p-1'>{calculateDiscountedPrice(album.price, album.descount)}</ins>
-// 									</div>
-// 									<p className="mt-1 text-sm text-gray-500">{album.artist}</p>
-// 								  </div>
-								
-// 								  <div className="flex items-center gap-4">
-//                                       <input
-//                                         type="number"
-//                                         min={1}
-//                                         value={album.quantity}
-//                                         onChange={(e) => handleUpdateQuantity(album.id, parseInt(e.target.value))}
-//                                         className="w-20 h-10 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 px-2"
-//                                       />
-// 									</div>
+  return (
+    <Drawer
+      placement="right"
+      open={openRight}
+      onClose={toggleDrawer}
+      className="p-4"
+    >
+      <div className="mb-6 flex items-center justify-between">
+        <Typography variant="h5" color="blue-gray">
+          Cart
+        </Typography>
+        <IconButton variant="text" color="blue-gray" onClick={toggleDrawer}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="h-5 w-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </IconButton>
+      </div>
+      <div className="flex-1 overflow-y-auto py-4">
+        {currentOrder.length === 0 ? (
+          <p className="text-muted-foreground text-sm">Your cart is empty.</p>
+        ) : (
+          <ul className="space-y-4">
+            {currentOrder.map((item) => (
+              <li key={item.id} className="flex items-center space-x-4">
+                <Image
+                  src={item.images?.[0] ?? '/placeholder.svg'}
+                  alt={item.name}
+                  width={64}
+                  height={64}
+                  className="size-16 rounded object-cover"
+                />
+                <div className="flex-1">
+                  <h3 className="text-sm font-medium">{item.name}</h3>
+                  <p className="text-muted-foreground text-sm">
+                    {item.price.display_amount} x {item.quantity}
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeFromCart(item.id)}
+                >
+                  Remove
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="flex-col items-stretch gap-2 sm:flex-row sm:justify-between">
+        <div className="flex justify-between">
+          <span>Total:</span>
+          <span>{subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button variant="outline" onClick={clearCart} disabled={currentOrder.length === 0}>
+            Clear Cart
+          </Button>
+          <Button color="green" disabled={currentOrder.length === 0}>
+            Checkout
+          </Button>
+        </div>
+      </div>
+    </Drawer>
+  );
+}
 
 
-// 								  <div className="flex flex-1 items-end justify-between text-sm">
-// 									<p className="text-red-500">Descuento {album.descount * 10}%</p>
-
-// 									<div className="flex">
-// 									  <button
-// 										type="button"
-// 										className="font-medium text-indigo-600 hover:text-indigo-500"
-// 										onClick={() => removeFromCart(album.id)}
-// 									  >
-// 										Eliminar
-// 									  </button>
-// 									</div>
-// 								  </div>
-// 								</div>
-// 							  </li>
-// 							))}
-// 						  </ul>
-// 						</div>
-// 					  </div>
-// 					</div>
-
-// 					<div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-// 						<div className="flex justify-between text-base font-medium text-gray-900">
-// 							<Link href="#" onClick={clearCart} className='underline decoration-2'>Vaciar carrito</Link>
-// 						</div>
-
-// 					  <div className="flex justify-between text-base font-medium text-gray-900">
-// 						<p>Subtotal con descuento aplicado</p>
-// 						<p>{subtotal}</p>
-// 					  </div>
-// 					  <div className="mt-6">
-// 						<Link
-// 						  href="#"
-// 						  className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-// 						  onClick={handleCheckout}
-// 						>
-// 						  Realizar pedido
-// 						</Link>
-// 					  </div>
-// 					  <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-// 						<p>
-// 						  o  
-// 						  <button
-// 							type="button"
-// 							className="font-medium text-indigo-600 hover:text-indigo-500"
-// 							onClick={onClose}
-// 						  >
-// 							 Continuar comprando
-// 							<span aria-hidden="true"> &rarr;</span>
-// 						  </button>
-// 						</p>
-// 					  </div>
-// 					</div>
-// 				  </div>
-// 				</Dialog>
-// 			  </Transition>
-// 			</div>
-// 		  </div>
-// 		</div>
-// 	  </Dialog>
-// 	</Transition>
-// 	<CheckoutDialog
-// 		isOpen={checkoutDialogOpen}
-// 		onClose={closeCheckoutDialog}
-// 		onConfirm={handleConfirmCheckout}
-// 		/>
-// 	<OrderSatus
-//         open={orderSuccessDialogOpen}
-//         onClose={() => setOrderSuccessDialogOpen(false)}
-//         orderDetails={orderDetails}
-//       />
-// 	</>
-//   );
-// }
+export function CartIcon({ className, ...props }) {
+  return (
+    <svg
+      className={`${className} text-indigo-700`}
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <g clipPath="url(#clip0_1730_25270)">
+        <path
+          d="M5.33317 14.6668C5.70136 14.6668 5.99984 14.3684 5.99984 14.0002C5.99984 13.632 5.70136 13.3335 5.33317 13.3335C4.96498 13.3335 4.6665 13.632 4.6665 14.0002C4.6665 14.3684 4.96498 14.6668 5.33317 14.6668Z"
+          stroke="currentColor"
+          strokeWidth="1.33333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M12.6667 14.6668C13.0349 14.6668 13.3333 14.3684 13.3333 14.0002C13.3333 13.632 13.0349 13.3335 12.6667 13.3335C12.2985 13.3335 12 13.632 12 14.0002C12 14.3684 12.2985 14.6668 12.6667 14.6668Z"
+          stroke="currentColor"
+          strokeWidth="1.33333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M1.3667 1.36719H2.70003L4.47337 9.64719C4.53842 9.95043 4.70715 10.2215 4.95051 10.4138C5.19387 10.606 5.49664 10.7074 5.8067 10.7005H12.3267C12.6301 10.7 12.9244 10.596 13.1607 10.4057C13.3971 10.2154 13.5615 9.95021 13.6267 9.65385L14.7267 4.70052H3.41337"
+          stroke="currentColor"
+          strokeWidth="1.33333"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1730_25270">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  )
+}

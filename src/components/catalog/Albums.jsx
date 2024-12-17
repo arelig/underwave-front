@@ -25,7 +25,7 @@ export default function Albums({ data: albumsData }){
 		<>
 		<div className="flex flex-wrap grow justify-center p-5">
 		  {currentItems.map((album) => (
-			<div key={album.id} className="m-3">
+			<div key={album.uuid} className="m-3">
 			  <AlbumCard data={album} />
 			</div>
 		  ))}

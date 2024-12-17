@@ -40,13 +40,6 @@ const AlbumCarousel = () => {
     const randomAlbums = shuffle(localAlbums).slice(0, 10);
 
     return (
-        <Suspense fallback={
-            <div className="flex items-center justify-center h-screen">
-                <div className="flex flex-col items-center">
-                    <Spinner color="indigo" />
-                </div>
-            </div>
-        }>
             <Carousel
                 className="p-5 m-2"
                 loop={true}
@@ -100,7 +93,7 @@ const AlbumCarousel = () => {
                     </div>
                 ))}
             </Carousel>
-        </Suspense>
+
     );
 }
 

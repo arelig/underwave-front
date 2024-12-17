@@ -6,9 +6,10 @@ import {
 	CardBody,
   } from '@material-tailwind/react';
 
+import Link from 'next/link';
+
 import Typography from "@components/material/CustomTypography";
 import Button from "@components/material/Button";
-
 
 import {CartContext} from '../../lib/cartContext';
 import { useContext, useState } from 'react';
@@ -30,13 +31,15 @@ const handleAddToCart = () => {
 return (
 	<Card key={id} className="w-56 min-h-[400px] max-h-[400px]">
 		<CardHeader shadow={false} floated={false} className="h-56">
+		<Link href={`/catalog/${id}`} passHref>
 			<Image 
-			src={artwork}
-			width="300"
-			height="300"
-			alt="Artwork"
-			className="w-full h-full object-cover"
-			/>
+				src={artwork}
+				width="300"
+				height="300"
+				alt="Artwork"
+				className="w-full h-full object-cover"
+				/>
+			</Link>
 		</CardHeader>
 		<CardBody className="flex flex-col justify-between">
 			<div>
@@ -49,7 +52,7 @@ return (
 					{artist}
 				</Typography>
 				</div>
-				<Typography color="blue-gray" className="font-medium font-bold">
+				<Typography color="blue-gray" className="font-medium">
 				$ {price}
 				</Typography>
 			</div>

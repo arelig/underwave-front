@@ -55,9 +55,7 @@ export const CartProvider = ({ children }) => {
         let total = 0;
         currentOrder.forEach((album) => {
             const price = parseFloat(album.price);
-            const discount = parseFloat(album.descount || 0) * 10; // Si el descuento no está definido, se asume 0
-            const discountedPrice = price - (price * discount / 100);
-            const subtotal = discountedPrice * album.quantity;
+            const subtotal = price * album.quantity;
             total += subtotal;
         });
         setSubtotal(total.toFixed(2));

@@ -1,8 +1,8 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import NavBar from '@components/navbar/NavBar'
-import SimpleFooter from '@components/footer'
-import {CartProvider} from '../lib/cartContext'
+import SimpleFooter from '@components/Footer'
+import { CartProvider } from '@lib/cartContext'
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +16,7 @@ const RootLayout = ({ children }) => {
     <html lang="en" className={'bg-stone-100 antialiased ' + inter.className}>
       <body className='bg-stone-100 p-3'>
         <CartProvider>
-          <NavBar />
+          <Header />
           {children}
           <SimpleFooter />
         </CartProvider>
