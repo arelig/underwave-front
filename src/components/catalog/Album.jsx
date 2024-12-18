@@ -16,7 +16,7 @@ import { useContext, useState } from 'react';
   
 export default function AlbumCard({ data: albumDetails }) {
 const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-const {id,name,artist,price,artwork} = albumDetails;
+const {uuid,name,artist,price,artwork} = albumDetails;
 
 const { addToCart } = useContext(CartContext);
 
@@ -29,9 +29,9 @@ const handleAddToCart = () => {
 };
 
 return (
-	<Card key={id} className="w-56 min-h-[400px] max-h-[400px]">
+	<Card key={uuid} className="w-56 min-h-[400px] max-h-[400px]">
 		<CardHeader shadow={false} floated={false} className="h-56">
-		<Link href={`/catalog/${id}`} passHref>
+		<Link href={`/catalog/${uuid}`} passHref>
 			<Image 
 				src={artwork}
 				width="300"

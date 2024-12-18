@@ -6,7 +6,7 @@ import AlbumCard from '@components/catalog/Album'
 
 const AlbumPage = () => {
     const router = useRouter()
-    const { id } = router.query
+    const { uuid } = router.query
     const [albumDetails, setAlbumDetails] = useState(null)
 
     useEffect(() => {
