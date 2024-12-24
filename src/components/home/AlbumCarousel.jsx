@@ -1,9 +1,9 @@
 "use client"
 import { useState, useEffect, Suspense } from "react";
 import { Carousel, IconButton, Spinner } from "@material-tailwind/react";
-//import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"
 import AlbumCard from "@components/catalog/Album";
-import getAlbums from "@lib/getAlbums";
+import { getAlbums}  from "@lib/catalog";
 import { useMediaQuery } from "react-responsive";
 
 const AlbumCarousel = () => {
@@ -41,28 +41,26 @@ const AlbumCarousel = () => {
 
     return (
             <Carousel
-                className="p-5 m-2"
+                className="p-2"
                 loop={true}
                 prevArrow={({ handlePrev }) => (
                     <IconButton
                         variant="text"
-                        color="deep-purple"
                         size="lg"
                         onClick={handlePrev}
-                        className="!absolute top-2/4 -translate-y-2/4 left-4"
+                        className="!absolute top-2/4 -translate-y-2/4 left-4  shadow-md"
                     >
-                        {/*<ArrowLeftIcon strokeWidth={2} className="w-6 h-6 indigo-900" />*/}
+                        <ArrowLeftIcon strokeWidth={2} className="w-6 h-6 text-color-[#171717]" />
                     </IconButton>
                 )}
                 nextArrow={({ handleNext }) => (
                     <IconButton
                         variant="text"
-                        color="deep-purple"
                         size="lg"
                         onClick={handleNext}
-                        className="!absolute top-2/4 -translate-y-2/4 !right-4"
+                        className="!absolute top-2/4 -translate-y-2/4 !right-4 shadow-md"
                     >
-                        {/* <ArrowRightIcon strokeWidth={2} className="w-6 h-6 indigo-900 " /> */}
+                        <ArrowRightIcon strokeWidth={2} className="w-6 h-6 text-color-[#171717] " />
                     </IconButton>
                 )}
                 navigation={({ setActiveIndex, activeIndex }) => (
@@ -71,7 +69,7 @@ const AlbumCarousel = () => {
                             <span
                                 key={i}
                                 className={`block h-1 cursor-pointer rounded-2xl transition-all ${
-                                    Math.floor(activeIndex / getAlbumsPerSlide()) === i ? "bg-stone-800 w-8" : "bg-stone/50 w-4"
+                                    Math.floor(activeIndex / getAlbumsPerSlide()) === i ? "bg-color-[#262626] w-8" : "bg-color-[#fafafa] w-4"
                                 }`}
                                 onClick={() => setActiveIndex(i * getAlbumsPerSlide())}
                             />
@@ -85,7 +83,7 @@ const AlbumCarousel = () => {
                             .slice(i * getAlbumsPerSlide(), i * getAlbumsPerSlide() + getAlbumsPerSlide())
                             .map((album) => (
                                 <AlbumCard
-                                    key={album.id}
+                                    key={album.uuid}
                                     data={album}
                                     className="transition ease-in-out delay-100 hover:-translate-y-1 scale-100 duration-300 bg-transparent"
                                 />

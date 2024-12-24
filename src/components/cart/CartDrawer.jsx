@@ -1,32 +1,28 @@
 'use client';
 
 import { useContext, useState } from 'react';
-import {
-	Drawer,
-} from '@material-tailwind/react';
+import { Drawer } from '@material-tailwind/react';
 import Image from 'next/image';
-import { CartContext } from '@/lib/cartContext';
-import Link from 'next/link';
-import Button from '@/components/material/Button';
+import { CartContext } from '@lib/cartContext';
+import Button from '@components/material/CustomButton';
 import CheckoutDialog from './CheckoutDialog';
-import { submitOrder } from '@/lib/submitOrder';
+import { useRouter } from 'next/navigation';
 
 export function CartDrawer({ openRight, toggleDrawer }) {
-	const { currentOrder, removeFromCart, clearCart, subtotal } = useContext(CartContext);
+	const { currentOrder, removeFromCart, subtotal, isAuthenticated } =
+		useContext(CartContext);
 	const [openDialog, setOpenDialog] = useState(false);
+	const router = useRouter();
 
-	const handleCheckout = async (email, currentOrder) => {
-		try {
-			const order = await submitOrder(email, currentOrder);
-			clearCart();
-			return order;
-		} catch (error) {
-			console.error('Checkout error:', error);
-			throw error;
+
+	const toggleDialog = () => {
+		if (!isAuthenticated) {
+			// Redirect to login if not authenticated
+			router.push('/login');
+		} else {
+			setOpenDialog(!openDialog);
 		}
 	};
-
-	const toggleDialog = () => setOpenDialog(!openDialog);
 
 	return (
 		<>
@@ -93,7 +89,7 @@ export function CartDrawer({ openRight, toggleDrawer }) {
 									className="w-full"
 									onClick={toggleDialog}
 								>
-									Checkout
+									{isAuthenticated ? 'Checkout' : 'Login to Checkout'}
 								</Button>
 							</div>
 							<div className="mt-6 flex justify-center text-center text-sm text-gray-500">
@@ -116,11 +112,11 @@ export function CartDrawer({ openRight, toggleDrawer }) {
 			<CheckoutDialog
 				openDialog={openDialog}
 				toggleDialog={toggleDialog}
-				handleCheckout={handleCheckout}
 			/>
 		</>
 	);
 }
+
 export function CartIcon({ className, ...props }) {
 	return (
 		<svg

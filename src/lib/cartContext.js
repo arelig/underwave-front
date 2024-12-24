@@ -1,18 +1,18 @@
-"use client"
-import { createContext, useState, useEffect, useCallback } from 'react';
-import { submitOrder } from '@lib/submitOrder';
+"use client";
+import { createContext, useState, useEffect, useCallback, useContext } from 'react';
+import { useAuth } from '@lib/AuthContext';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
 	const [currentOrder, setCurrentOrder] = useState([]);
 	const [subtotal, setSubtotal] = useState(0);
+	const { user } = useAuth(); // Access authentication status
 
 	const addToCart = (album) => {
 		const existingAlbum = currentOrder.find((item) => item.uuid === album.uuid);
 
 		if (existingAlbum) {
-			// El álbum ya está en el carrito, actualizar la cantidad
 			const updatedOrder = currentOrder.map((item) => {
 				if (item.uuid === album.uuid) {
 					return { ...item, quantity: item.quantity + 1 };
@@ -22,7 +22,6 @@ export const CartProvider = ({ children }) => {
 
 			setCurrentOrder(updatedOrder);
 		} else {
-			// El álbum no está en el carrito, agregarlo con cantidad 1
 			const updatedAlbum = { ...album, quantity: 1 };
 			setCurrentOrder((prevOrder) => [...prevOrder, updatedAlbum]);
 		}
@@ -42,10 +41,7 @@ export const CartProvider = ({ children }) => {
 		setCurrentOrder((prevOrder) =>
 			prevOrder.map((album) => {
 				if (album.uuid === albumUuid) {
-					return {
-						...album,
-						quantity: quantity,
-					};
+					return { ...album, quantity: quantity };
 				}
 				return album;
 			})
@@ -62,24 +58,23 @@ export const CartProvider = ({ children }) => {
 		setSubtotal(total.toFixed(2));
 	}, [currentOrder]);
 
+	useEffect(() => {
+		calculateSubtotal();
+	}, [currentOrder, calculateSubtotal]);
 
-		useEffect(() => {
-			calculateSubtotal();
-		}, [currentOrder, calculateSubtotal]);
-
-
-		return (
-			<CartContext.Provider
-				value={{
-					currentOrder,
-					addToCart,
-					removeFromCart,
-					clearCart,
-					updateQuantity,
-					subtotal
-				}}
-			>
-				{children}
-			</CartContext.Provider>
-		);
-	};
+	return (
+		<CartContext.Provider
+			value={{
+				currentOrder,
+				addToCart,
+				removeFromCart,
+				clearCart,
+				updateQuantity,
+				subtotal,
+				isAuthenticated: !!user, // Provide authentication status
+			}}
+		>
+			{children}
+		</CartContext.Provider>
+	);
+};

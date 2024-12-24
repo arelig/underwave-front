@@ -11,8 +11,6 @@ export default function CatalogPage() {
   const [albums, setAlbums] = useState([])
   const [genres, setGenres] = useState([])
 
-
-  // Fetch albums and genres on page load once
   useEffect(() => {
     async function fetchData() {
       const albums = await getAlbums()
@@ -37,7 +35,7 @@ export default function CatalogPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Catalog</h1>
+      <h1 className="text-3xl font-bold mb-6 text-color-[#171717]">Explora nuestro catálogo por género</h1>
       <GenreFilter
         genres={genres}
         selectedGenre={selectedGenre}
@@ -47,7 +45,7 @@ export default function CatalogPage() {
               <Albums data={filteredAlbums} />
             ) : (
               <div className="flex items-center justify-center h-full">
-                <Typography variant="h4" className="text-gray-500">
+                <Typography variant="h4" className="text-color-[#171717]">
                   Oops, nada por aquí.
                 </Typography>
               </div>

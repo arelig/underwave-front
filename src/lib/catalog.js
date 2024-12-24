@@ -5,10 +5,10 @@ export async function getAlbums() {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
         const data = await res.json();
-        return data; // Return the data directly
+        return data; 
     } catch (error) {
         console.error('Failed to fetch albums:', error);
-        return []; // Return an empty array in case of error
+        return []; 
     }
 }
 
@@ -19,10 +19,10 @@ export async function getGenres () {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
         const data = await res.json();
-        return data; // Return the data directly
+        return data;
     }catch (error) {
         console.error('Failed to fetch genres:', error);
-        return []; // Return an empty array in case of error
+        return []; 
     }
 }
 

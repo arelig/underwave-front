@@ -1,34 +1,40 @@
-// lib/submitOrder.js
+import Cookies from 'js-cookie';
 
-export const submitOrder = async (email, details) => {
-  const orderData = {
-    email: email,
-    status: 'created',
-    details: details.map((album) => ({
-      album_uuid: album.uuid,
-      quantity: album.quantity,
-    })),
+const handleResponse = async (response) => {
+	if (!response.ok) {
+	  const error = await response.json();
+	  throw new Error(error.detail || error.error || 'An error occurred');
+	}
+	return response.json();
   };
 
-  try {
-    const response = await fetch('http://localhost:8000/api/orders/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderData),
-    });
+export const submitOrder = async (details) => {
+	const accessToken = Cookies.get('access_token');
+	if (!accessToken) {
+		throw new Error('Access token not found. Please log in again.');
+	}
 
-    if (!response.ok) {
-      throw new Error('Error al enviar la orden');
-    }
+	const orderData = {
+		status: 'created',
+		details: details.map((album) => ({
+			album_uuid: album.uuid,
+			quantity: album.quantity,
+		})),
+	};
 
-    const order = await response.json();
-    console.log('La orden se envió correctamente', order);
-    return order;
+	try {
+		const response = await fetch('http://localhost:8000/api/orders/', {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(orderData),
+		});
 
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
+		return await handleResponse(response);
+	} catch (error) {
+		console.error('Error submitting order:', error.message);
+		throw error;
+	}
 };
