@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, useEffect, useCallback, useContext } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@lib/AuthContext';
 
 export const CartContext = createContext();

@@ -1,6 +1,6 @@
-import Cookie from 'js-cookie';
+import Cookies from 'js-cookie';
 
-const API_BASE_URL = 'http://localhost:8000/api/customusers/';
+const API_BASE_URL = 'http://localhost:8000/api/customuser/';
 
 // Helper function to handle fetch errors
 const handleResponse = async (response) => {
@@ -11,8 +11,6 @@ const handleResponse = async (response) => {
 	return response.json();
 };
 
-// Login user and retrieve tokens
-// Login user and store tokens in cookies
 export const login = async (username, password) => {
 	const response = await fetch(`${API_BASE_URL}login/`, {
 		method: 'POST',
@@ -22,6 +20,9 @@ export const login = async (username, password) => {
 
 	const data = await handleResponse(response);
 
+	Cookies.set('access_token', data.access, { secure: true, sameSite: 'Strict' });
+	Cookies.set('refresh_token', data.refresh, { secure: true, sameSite: 'Strict' });
+
 	return {
 		access: data.access,
 		refresh: data.refresh,
@@ -29,11 +30,10 @@ export const login = async (username, password) => {
 	};
 };
 
-// Fetch user profile
 export const fetchProfile = async () => {
-	const accessToken = Cookies.get('access_token'); // Retrieve token from cookies
+	const accessToken = Cookies.get('access_token');
 	if (!accessToken) {
-		throw new Error('Access token not found. Please log in again.');
+		throw new Error('No access token found. Please log in again.');
 	}
 
 	const response = await fetch(`${API_BASE_URL}me/`, {
@@ -46,22 +46,22 @@ export const fetchProfile = async () => {
 	return handleResponse(response);
 };
 
-// Register a new user
+
 export const registerUser = async (username, email, password) => {
-	const response = await fetch(API_BASE_URL, {
+	const response = await fetch(`${API_BASE_URL}`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ username, email, password }),
 	});
 
-	return handleResponse(response); // Returns user object
+	return handleResponse(response);
 };
 
-// Refresh the access token using the refresh token
 export const refreshAccessToken = async () => {
 	const refreshToken = Cookies.get('refresh_token');
+
 	if (!refreshToken) {
-		throw new Error('Refresh token not found. Please log in again.');
+		throw new Error('No refresh token found. Please log in again.');
 	}
 
 	const response = await fetch('http://localhost:8000/api/token/refresh/', {
@@ -72,8 +72,7 @@ export const refreshAccessToken = async () => {
 
 	const data = await handleResponse(response);
 
-	// Update access token in cookies
 	Cookies.set('access_token', data.access, { secure: true, sameSite: 'Strict' });
 
-	return data.access; // Return new access token
+	return data.access; 
 };

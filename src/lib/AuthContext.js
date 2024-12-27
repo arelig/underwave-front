@@ -13,43 +13,47 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const initializeUser = async () => {
-			setLoading(true); // Set loading state to true while initializing
-			try {
-				const accessToken = Cookies.get('access_token');
-
-				if (!accessToken) {
-					console.warn('No access token found in cookies. User not logged in.');
-					setUser(null); // No token, no user
-					return;
-				}
-
-				// Attempt to fetch the user profile
-				try {
-					const profile = await fetchProfile(accessToken);
-					setUser(profile); // Set the user if the token is valid
-				} catch (profileError) {
-					console.warn('Access token expired or invalid. Attempting to refresh token...');
-
-					// Attempt to refresh the access token
-					try {
-						const newAccessToken = await refreshAccessToken();
-						const profile = await fetchProfile(newAccessToken);
-						setUser(profile); // Update user with refreshed token
-					} catch (refreshError) {
-						console.error('Token refresh failed:', refreshError.message);
-						logoutUser(); // Clear session if refresh fails
-					}
-				}
-			} catch (err) {
-				console.error('Error initializing user:', err.message);
-				logoutUser(); // Clear session on unexpected errors
-			} finally {
-				setLoading(false); // End loading state
+		  if (typeof window === 'undefined') {
+			return; // Exit early if running on the server
+		  }
+	
+		  setLoading(true); // Set loading state to true while initializing
+		  try {
+			const accessToken = Cookies.get('access_token');
+	
+			if (!accessToken) {
+			  console.warn('No access token found in cookies. User not logged in.');
+			  setUser(null); // No token, no user
+			  return;
 			}
+	
+			// Attempt to fetch the user profile
+			try {
+			  const profile = await fetchProfile(accessToken);
+			  setUser(profile); // Set the user if the token is valid
+			} catch (profileError) {
+			  console.warn('Access token expired or invalid. Attempting to refresh token...');
+	
+			  // Attempt to refresh the access token
+			  try {
+				const newAccessToken = await refreshAccessToken();
+				const profile = await fetchProfile(newAccessToken);
+				setUser(profile); // Update user with refreshed token
+			  } catch (refreshError) {
+				console.error('Token refresh failed:', refreshError.message);
+				logoutUser(); // Clear session if refresh fails
+			  }
+			}
+		  } catch (err) {
+			console.error('Error initializing user:', err.message);
+			logoutUser(); // Clear session on unexpected errors
+		  } finally {
+			setLoading(false); // End loading state
+		  }
 		};
-
+	
 		initializeUser();
-	}, []);
+	  }, []);
 
 
 	// Login function

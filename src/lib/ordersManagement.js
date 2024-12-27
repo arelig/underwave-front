@@ -10,6 +10,7 @@ const handleResponse = async (response) => {
 
 export const submitOrder = async (details) => {
 	const accessToken = Cookies.get('access_token');
+	
 	if (!accessToken) {
 		throw new Error('Access token not found. Please log in again.');
 	}
@@ -38,3 +39,25 @@ export const submitOrder = async (details) => {
 		throw error;
 	}
 };
+
+export const fetchOrders = async () => {
+	const accessToken = Cookies.get('access_token');
+	
+	if (!accessToken) {
+		throw new Error('Access token not found. Please log in again.');
+	}
+
+	try {
+		const response = await fetch('http://localhost:8000/api/orders/my-orders/', {
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${accessToken}`,
+			},
+		});
+
+		return await handleResponse(response);
+	} catch (error) {
+		console.error('Error fetching orders:', error.message);
+		throw error;
+	}
+}

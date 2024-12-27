@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import {
 	Dialog,
 	DialogHeader,
@@ -11,7 +11,7 @@ import {
 import Image from 'next/image';
 import { CartContext } from '@lib/cartContext';
 import { useAuth } from '@lib/AuthContext';
-import { submitOrder } from '@lib/submitOrder';
+import { submitOrder } from '@lib/ordersManagement';
 import Button from '@components/material/CustomButton';
 
 export default function CheckoutDialog({ openDialog, toggleDialog }) {
@@ -20,20 +20,22 @@ export default function CheckoutDialog({ openDialog, toggleDialog }) {
 	const [orderDetails, setOrderDetails] = useState(null);
 	const [error, setError] = useState(null);
 
+	// Reset state when dialog opens
+	useEffect(() => {
+		if (openDialog) {
+			setOrderDetails(null);
+			setError(null);
+		}
+	}, [openDialog]);
+
 	const handleConfirmOrder = async () => {
 		if (!user) {
 			setError('You must be logged in to complete the checkout.');
 			return;
 		}
 
-		const accessToken = localStorage.getItem('access_token');
-		if (!accessToken) {
-			setError('Authentication token not found. Please log in again.');
-			return;
-		}
-
 		try {
-			const order = await submitOrder(currentOrder, accessToken);
+			const order = await submitOrder(currentOrder);
 			setOrderDetails(order);
 			clearCart(); // Clear the cart only on successful submission
 			setError(null); // Clear previous errors
@@ -42,7 +44,6 @@ export default function CheckoutDialog({ openDialog, toggleDialog }) {
 			setError(err.message || 'Failed to process your order. Please try again.');
 		}
 	};
-
 
 	return (
 		<Dialog open={openDialog} handler={toggleDialog} size="xl">
@@ -57,10 +58,18 @@ export default function CheckoutDialog({ openDialog, toggleDialog }) {
 							Order Number: {orderDetails.id}
 						</Typography>
 						<Typography variant="body1" color="blue-gray">
-							Order Date: {new Date(orderDetails.order_date).toLocaleString()}
+							Order Date:{" "}
+							{new Date(orderDetails.order_date).toLocaleString('en-US', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+								hour: '2-digit',
+								minute: '2-digit',
+								second: '2-digit',
+							})}
 						</Typography>
 						<Typography variant="body1" color="blue-gray">
-							Total: {orderDetails.total}
+							Total: ${parseFloat(orderDetails.total).toFixed(2)}
 						</Typography>
 					</>
 				) : (
